@@ -1,0 +1,34 @@
+version: '2'
+services:
+  batch:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: razorpay:batch
+    container_name: razorpay-batch
+    volumes:
+    - .build:/java_build
+    links:
+    - batch_db
+    ports:
+    - 8081:8080
+    depends_on:
+    - batch_db
+    environment:
+      DATABASE_HOST: batch_db
+      DATABASE_USER: batch_user
+      DATABASE_PASSWORD: 123
+      DATABASE_NAME: batch_test
+      DATABASE_PORT: 3306
+      APP_MODE: dev
+      JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,address=5005,server=y,suspend=n
+  batch_db:
+    container_name: batch_db
+    image: mysql:8.0.12
+    environment:
+      MYSQL_ROOT_PASSWORD: 123
+      MYSQL_USER: batch_user
+      MYSQL_PASSWORD: 123
+      MYSQL_DATABASE: batch_test
+    volumes:
+    - ./dockerconf/batch_db.sql:/docker-entrypoint-initdb.d/init.sql

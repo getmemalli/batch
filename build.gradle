@@ -1,0 +1,88 @@
+buildscript {
+	ext {
+		springBootVersion = '2.1.1.RELEASE'
+		gradleDockerVersion = '0.18.0'
+	}
+	repositories {
+		maven {
+			url "https://dl.bintray.com/palantir/releases/"
+		}
+		mavenCentral()
+	}
+	dependencies {
+		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+		//classpath("com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}")
+	}
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse-wtp'
+apply plugin: 'idea'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+//apply plugin: 'war'
+//apply plugin: 'com.palantir.docker'
+
+
+group = 'com.razorpay'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+String mysqlConnectorVersion = '8.0.12'
+String slf4jVersion = '1.7.25'
+String jacksonVersion = '2.9.7'
+String springMetricsVersion = '0.5.1.RELEASE'
+String prometheusClientVersion = '0.5.0'
+
+bootJar {
+	baseName = 'batch-docker'
+	version =  '0.1.0'
+}
+
+repositories {
+	mavenCentral()
+}
+
+configurations {
+	providedRuntime
+}
+
+dependencies {
+	implementation('org.springframework.boot:spring-boot-starter-batch')
+	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
+	implementation('org.springframework.boot:spring-boot-starter-data-rest')
+	implementation('org.springframework.boot:spring-boot-starter-jersey')
+	implementation('org.springframework.boot:spring-boot-starter-quartz')
+	implementation('org.springframework.boot:spring-boot-starter-web')
+
+	implementation("org.slf4j:slf4j-api:${slf4jVersion}")
+	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
+	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
+	implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
+	implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion")
+	implementation("org.springframework.metrics:spring-metrics:$springMetricsVersion")
+	implementation("io.prometheus:simpleclient_common:$prometheusClientVersion")
+
+	implementation('org.springframework.retry:spring-retry')
+	runtimeOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
+	//runtimeOnly('org.postgresql:postgresql')
+	compileOnly('org.projectlombok:lombok')
+	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
+	testImplementation('org.springframework.boot:spring-boot-starter-test')
+	testImplementation('org.springframework.batch:spring-batch-test')
+}
+
+/*
+
+task unpack(type: Copy) {
+	dependsOn bootJar
+	from(zipTree(tasks.bootJar.outputs.files.singleFile))
+	into("build/dependency")
+}
+
+docker {
+	name "${project.group}/${bootJar.baseName}"
+	copySpec.from(tasks.unpack.outputs).into("dependency")
+	buildArgs(['DEPENDENCY': "dependency"])
+}
+*/
