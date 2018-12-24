@@ -36,7 +36,11 @@ String prometheusClientVersion = '0.5.0'
 
 bootJar {
 	baseName = 'batch-docker'
-	version =  '0.1.0'
+	version = '0.1.0'
+
+	from {
+		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
+	}
 }
 
 repositories {
@@ -70,6 +74,7 @@ dependencies {
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.batch:spring-batch-test')
+	compileOnly("org.springframework.boot:spring-boot-devtools")
 }
 
 /*

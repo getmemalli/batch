@@ -10,10 +10,10 @@
 
 
 FROM java:8
-VOLUME /tmp
 COPY ./build/libs/* ./app.jar
 EXPOSE 8080
-CMD ["java","-jar","app.jar"]
+
+CMD java -Xdebug -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8081 -jar app.jar
 # ADD batch-docker-1.0.jar batch-docker-1.0.jar
 # ENTRYPOINT ["java","-jar","batch-docker-1.0.jar"]
 #ENTRYPOINT ["java","--version"]

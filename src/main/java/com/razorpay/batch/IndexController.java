@@ -8,7 +8,7 @@ public class IndexController {
 
     @RequestMapping("/index")
     public String index() {
-        return "Hello Batch";
+        return "Hello Batch test";
     }
 
 }
