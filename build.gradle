@@ -35,6 +35,7 @@ ext {
 	springMetricsVersion = '0.5.1.RELEASE'
 	prometheusClientVersion = '0.5.0'
 	slf4jVersion = '1.7.25'
+	swaggerVersion = '2.9.2'
 }
 
 bootJar {
@@ -59,14 +60,15 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-jersey')
 	implementation('org.springframework.boot:spring-boot-starter-quartz')
 	implementation('org.springframework.boot:spring-boot-starter-web')
+	implementation("org.springframework.boot:spring-boot-devtools")
 
 	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
 	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 	implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
 	implementation("com.fasterxml.jackson.datatype:jackson-datatype-joda:$jacksonVersion")
+
 	implementation("org.springframework.metrics:spring-metrics:$springMetricsVersion")
 	implementation("io.prometheus:simpleclient_common:$prometheusClientVersion")
-
 	implementation('org.springframework.retry:spring-retry')
 	implementation("org.slf4j:slf4j-api:${slf4jVersion}")
 	runtimeOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
@@ -76,7 +78,9 @@ dependencies {
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.batch:spring-batch-test')
-	implementation("org.springframework.boot:spring-boot-devtools")
+	implementation("io.springfox:springfox-swagger-ui:${swaggerVersion}")
+	implementation("io.springfox:springfox-swagger2:${swaggerVersion}")
+
 }
 
 task docker(type: DockerBuildImage) {
