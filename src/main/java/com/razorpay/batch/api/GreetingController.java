@@ -1,5 +1,6 @@
-package com.razorpay.batch;
+package com.razorpay.batch.api;
 
+import com.razorpay.batch.Greeting;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
