@@ -10,7 +10,6 @@ services:
       - batch_db
     ports:
       - 8081:8080
-      - 5055:5055
     depends_on:
       - batch_db
     environment:
@@ -19,7 +18,7 @@ services:
       DATABASE_PASSWORD: 123
       DATABASE_NAME: batch_test
       DATABASE_PORT: 3306
-      APP_MODE: dev_docker
+      APP_MODE: beta
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5055
   batch_db:
     image: mysql:8.0.12

@@ -3,7 +3,7 @@ services:
   batch:
     build:
       context: ./
-      dockerfile: Dockerfile.dev
+      dockerfile: Dockerfile
     image: razorpay-batch
     container_name: razorpay-batch
     links:
