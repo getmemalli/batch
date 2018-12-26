@@ -28,19 +28,18 @@ group = 'com.razorpay'
 version = '0.0.1-SNAPSHOT'
 sourceCompatibility = 1.8
 
-String mysqlConnectorVersion = '8.0.12'
-String slf4jVersion = '1.7.25'
-String jacksonVersion = '2.9.7'
-String springMetricsVersion = '0.5.1.RELEASE'
-String prometheusClientVersion = '0.5.0'
+ext {
+	mysqlConnectorVersion = '8.0.12'
+	jacksonVersion = '2.9.7'
+	springMetricsVersion = '0.5.1.RELEASE'
+	prometheusClientVersion = '0.5.0'
+	slf4jVersion = '1.7.25'
+}
 
 bootJar {
-	baseName = 'batch-docker'
-	version = '0.1.0'
-
-	from {
-		configurations.compile.collect { it.isDirectory() ? it : zipTree(it) }
-	}
+    excludeDevtools = false
+    baseName = 'batch-docker'
+    version = '0.1.0'
 }
 
 repositories {
@@ -59,7 +58,6 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-quartz')
 	implementation('org.springframework.boot:spring-boot-starter-web')
 
-	implementation("org.slf4j:slf4j-api:${slf4jVersion}")
 	implementation("com.fasterxml.jackson.core:jackson-core:$jacksonVersion")
 	implementation("com.fasterxml.jackson.core:jackson-databind:$jacksonVersion")
 	implementation("com.fasterxml.jackson.core:jackson-annotations:$jacksonVersion")
@@ -68,15 +66,16 @@ dependencies {
 	implementation("io.prometheus:simpleclient_common:$prometheusClientVersion")
 
 	implementation('org.springframework.retry:spring-retry')
+	implementation("org.slf4j:slf4j-api:${slf4jVersion}")
 	runtimeOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
 	//runtimeOnly('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
+	annotationProcessor('org.projectlombok:lombok')
 	providedRuntime('org.springframework.boot:spring-boot-starter-tomcat')
 	testImplementation('org.springframework.boot:spring-boot-starter-test')
 	testImplementation('org.springframework.batch:spring-batch-test')
-	compileOnly("org.springframework.boot:spring-boot-devtools")
+	implementation("org.springframework.boot:spring-boot-devtools")
 }
-
 /*
 
 task unpack(type: Copy) {
