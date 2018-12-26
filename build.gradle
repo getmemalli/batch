@@ -1,7 +1,7 @@
 buildscript {
 	ext {
 		springBootVersion = '2.1.1.RELEASE'
-		gradleDockerVersion = '0.18.0'
+		gradleDockerVersion = '4.2.0'
 	}
 	repositories {
 		maven {
@@ -11,17 +11,18 @@ buildscript {
 	}
 	dependencies {
 		classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
-		//classpath("com.palantir.gradle.docker:gradle-docker:${gradleDockerVersion}")
+		classpath("com.bmuschko:gradle-docker-plugin:${gradleDockerVersion}")
 	}
 }
+// Import task types
+import com.bmuschko.gradle.docker.tasks.image.*
 
 apply plugin: 'java'
 apply plugin: 'eclipse-wtp'
 apply plugin: 'idea'
 apply plugin: 'org.springframework.boot'
 apply plugin: 'io.spring.dependency-management'
-//apply plugin: 'war'
-//apply plugin: 'com.palantir.docker'
+apply plugin: 'com.bmuschko.docker-remote-api'
 
 
 group = 'com.razorpay'
@@ -44,6 +45,7 @@ bootJar {
 
 repositories {
 	mavenCentral()
+	jcenter()
 }
 
 configurations {
@@ -76,17 +78,9 @@ dependencies {
 	testImplementation('org.springframework.batch:spring-batch-test')
 	implementation("org.springframework.boot:spring-boot-devtools")
 }
-/*
 
-task unpack(type: Copy) {
-	dependsOn bootJar
-	from(zipTree(tasks.bootJar.outputs.files.singleFile))
-	into("build/dependency")
+task docker(type: DockerBuildImage) {
+	dependsOn build
+	inputDir = file('.')
+	tags = ["$bootJar.baseName:$bootJar.version"]
 }
-
-docker {
-	name "${project.group}/${bootJar.baseName}"
-	copySpec.from(tasks.unpack.outputs).into("dependency")
-	buildArgs(['DEPENDENCY': "dependency"])
-}
-*/

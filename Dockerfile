@@ -10,3 +10,4 @@ RUN chmod +x dockerconf/entrypoint.sh
 EXPOSE 8080
 
 ENTRYPOINT  ["dockerconf/entrypoint.sh"]
+
