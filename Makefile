@@ -11,7 +11,10 @@ BUILD = BUILD
 #Files used
 DOCKER_DEV_COMPOSE_FILE = docker-compose.dev.yml
 
-build:
+.PHONY: build
+
+build:	
+	make clean
 	$(GRADLE) $(CLEAN) $(BUILD)
 	$(DOCKER_COMPOSE) -f ${DOCKER_DEV_COMPOSE_FILE} up -d --build
 	@echo "Container build Setup Complete. You may now execute 'docker ps' to see if things are up"

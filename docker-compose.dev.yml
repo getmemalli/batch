@@ -13,23 +13,25 @@ services:
       - 5055:5055
     depends_on:
       - batch_db
+    restart: always
     environment:
       DATABASE_HOST: batch_db
       DATABASE_USER: batch_user
       DATABASE_PASSWORD: 123
       DATABASE_NAME: batch_test
-      DATABASE_PORT: 3306
+      DATABASE_PORT: 5432
       APP_MODE: dev_docker
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5055
-      LOG_LEVEL: debug
+      LOG_LEVEL: info
   batch_db:
-    image: mysql:8.0.12
+    image: postgres:9.6.11
     container_name: batch_db
+    restart: always
     environment:
-      MYSQL_ROOT_PASSWORD: 123
-      MYSQL_USER: batch_user
-      MYSQL_PASSWORD: 123
+      POSTGRES_ROOT_PASSWORD: 123
+      POSTGRES_USER: root
+      POSTGRES_PASSWORD: 123
     volumes:
       - ./dockerconf/batch_db.sql:/docker-entrypoint-initdb.d/init.sql
     ports:
-      - 3306:3306
+      - 5432:5432
