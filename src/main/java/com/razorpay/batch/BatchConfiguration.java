@@ -34,19 +34,6 @@ public class BatchConfiguration {
     @Autowired
     private PersonItemWriter personItemWriter;
 
-    /*@Bean
-    public JobLauncher jobLauncher() throws Exception
-    {
-        SimpleJobLauncher jobLauncher = new SimpleJobLauncher();
-
-        jobLauncher.setJobRepository(jobRepository);
-        jobLauncher.setTaskExecutor(new SimpleAsyncTaskExecutor());
-        jobLauncher.afterPropertiesSet();
-
-        return jobLauncher;
-    }*/
-
-
     @Bean
     public Job importUserJob(Step step1) {
         return jobBuilderFactory.get("importUserJob")
