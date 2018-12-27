@@ -21,6 +21,7 @@ services:
       DATABASE_PORT: 3306
       APP_MODE: dev_docker
       JAVA_OPTS: -agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=5055
+      LOG_LEVEL: debug
   batch_db:
     image: mysql:8.0.12
     container_name: batch_db

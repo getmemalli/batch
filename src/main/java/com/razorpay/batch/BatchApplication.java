@@ -10,6 +10,8 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @EnableBatchProcessing
 public class BatchApplication {
 	public static void main(String[] args) {
+
+		log.debug("========starting app =========");
 		SpringApplication.run(BatchApplication.class, args);
 	}
 }

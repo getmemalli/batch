@@ -51,6 +51,8 @@ repositories {
 
 configurations {
 	providedRuntime
+	compile.exclude module: 'spring-boot-starter-logging'
+
 }
 
 dependencies {
@@ -58,6 +60,7 @@ dependencies {
 	implementation('org.springframework.boot:spring-boot-starter-data-jpa')
 	implementation('org.springframework.boot:spring-boot-starter-data-rest')
 	implementation('org.springframework.boot:spring-boot-starter-jersey')
+	implementation('org.springframework.boot:spring-boot-starter-log4j2')
 	implementation('org.springframework.boot:spring-boot-starter-quartz')
 	implementation('org.springframework.boot:spring-boot-starter-web')
 	implementation("org.springframework.boot:spring-boot-devtools")
@@ -70,7 +73,6 @@ dependencies {
 	implementation("org.springframework.metrics:spring-metrics:$springMetricsVersion")
 	implementation("io.prometheus:simpleclient_common:$prometheusClientVersion")
 	implementation('org.springframework.retry:spring-retry')
-	implementation("org.slf4j:slf4j-api:${slf4jVersion}")
 	runtimeOnly("mysql:mysql-connector-java:${mysqlConnectorVersion}")
 	//runtimeOnly('org.postgresql:postgresql')
 	compileOnly('org.projectlombok:lombok')
