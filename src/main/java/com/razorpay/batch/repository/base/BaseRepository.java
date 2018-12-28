@@ -1,4 +1,4 @@
-package com.razorpay.batch.repository;
+package com.razorpay.batch.repository.base;
 
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.repository.NoRepositoryBean;
