@@ -1,7 +1,9 @@
 package com.razorpay.batch.api;
 
+import com.razorpay.batch.batchEngine.JobEngine;
 import com.razorpay.batch.configuration.BatchJobConfig;
-import com.razorpay.batch.configuration.StepsConfig;
+import com.razorpay.batch.configuration.I_StepsConfig;
+import com.razorpay.batch.configuration.SimpleStepsConfig;
 import com.razorpay.batch.itemprocessor.PersonItemProcessor;
 import com.razorpay.batch.itemreader.PersonItemReader;
 import com.razorpay.batch.itemwriter.PersonItemWriter;
@@ -10,6 +12,7 @@ import org.springframework.batch.core.JobParameters;
 import org.springframework.batch.core.JobParametersBuilder;
 import org.springframework.batch.core.configuration.annotation.JobBuilderFactory;
 import org.springframework.batch.core.configuration.annotation.StepBuilderFactory;
+import org.springframework.batch.core.job.SimpleJob;
 import org.springframework.batch.core.job.builder.JobBuilder;
 import org.springframework.batch.core.launch.JobLauncher;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -51,10 +54,17 @@ public class TestController {
         return "Hello Batch";
     }
 
+    public String test() {
+
+
+        return "done";
+    }
+
     @RequestMapping(value = "/test/process", method = {RequestMethod.GET})
     public Response process() throws Exception {
 
-        processDynamicJob();
+        dynamicJobProcessing();
+        //processDynamicJob();
 
         HashMap<String, Object> response = new HashMap<>();
         response.put("message", "Processed");
@@ -68,19 +78,24 @@ public class TestController {
         BatchJobConfig batchJobConfig = new BatchJobConfig();
         batchJobConfig.setName("DynamicJob");
 
-        StepsConfig stepsConfig = new StepsConfig();
+        SimpleStepsConfig stepsConfig = new SimpleStepsConfig();
         stepsConfig.setName("DynamicStep");
         stepsConfig.setItemReader(personItemReader);
         stepsConfig.setItemWriter(personItemWriter);
         stepsConfig.setItemProcessor(personItemProcessor);
 
-        List<StepsConfig> stepsConfigList = new ArrayList<>();
+        List<I_StepsConfig> stepsConfigList = new ArrayList<>();
         stepsConfigList.add(stepsConfig);
 
-        batchJobConfig.setSteps(stepsConfigList);
+        batchJobConfig.setStepsConfig(stepsConfigList);
 
         JobBuilder dynamicJobBuilder = jobBuilderFactory.get(batchJobConfig.getName());
         Job dynamicJob = dynamicJobBuilder.start(stepsConfig.generateStep(stepBuilderFactory)).build();
+
+        Job dynamicJob1 = new SimpleJob();
+        ((SimpleJob) dynamicJob1).setName(batchJobConfig.getName());
+        ((SimpleJob) dynamicJob1).addStep(stepsConfig.generateStep(stepBuilderFactory));
+
 
         JobParameters params = new JobParametersBuilder()
                 .addString("JobID", String.valueOf(System.currentTimeMillis()))
@@ -89,7 +104,24 @@ public class TestController {
 
 
         return "Done";
+    }
 
+    public boolean dynamicJobProcessing() throws Exception {
+
+        JobEngine jobEngine = new JobEngine();
+        BatchJobConfig batchJobConfig = jobEngine.getConfig();
+
+        JobBuilder dynamicJobBuilder = jobBuilderFactory.get(batchJobConfig.getName());
+        I_StepsConfig stepsConfig = batchJobConfig.getStepsConfig().get(0);
+        //stepsConfig.generateStep(stepBuilderFactory);
+        Job dynamicJob = dynamicJobBuilder.start(stepsConfig.generateStep(stepBuilderFactory)).build();
+
+        JobParameters params = new JobParametersBuilder()
+                .addString("JobID", String.valueOf(System.currentTimeMillis()))
+                .toJobParameters();
+        jobLauncher.run(dynamicJob, params);
+
+        return false;
     }
 
 }
